@@ -1,4 +1,17 @@
 <script setup lang="ts">
+const route = useRoute()
+const router = useRouter()
+
+const showClose = computed(() => route.path === '/eula' || route.path === '/privacy')
+
+function close() {
+  if (window.history.length > 1) {
+    router.back()
+  } else {
+    router.push('/')
+  }
+}
+
 const trailCount = 4
 const trailEls = ref<HTMLElement[]>([])
 const glowVisible = ref(false)
@@ -63,10 +76,19 @@ onUnmounted(() => {
     </svg>
     <div class="noise-overlay" />
 
-    <header class="header">
-      <img src="~/assets/logo.png" alt="Seqman" class="logo-img">
-      <h1 class="logo">Seqman</h1>
+    <header class="header" :class="{ 'has-close': showClose }">
+      <NuxtLink to="/" class="header-link">
+        <img src="~/assets/logo.png" alt="Seqman" class="logo-img">
+        <h1 class="logo">Seqman</h1>
+      </NuxtLink>
       <p class="subtitle">Stepdeq</p>
+      <button
+        v-if="showClose"
+        class="close-btn"
+        aria-label="Close"
+        @click="close"
+      />
+
     </header>
 
     <main class="content">
@@ -205,9 +227,80 @@ a:hover {
 }
 
 .header {
+  position: relative;
   text-align: center;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid #1e1e1e;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #1e1e1e;
+}
+
+.header.has-close::after {
+  right: 52px;
+}
+
+.close-btn {
+  position: absolute;
+  bottom: -20px;
+  right: 0;
+  z-index: 10;
+  background: none;
+  border: 1px solid #2a2a2a;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: border-color 0.3s;
+  padding: 0;
+}
+
+.close-btn::before,
+.close-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 1.5px;
+  background: #555;
+  border-radius: 1px;
+  transition: background 0.3s;
+}
+
+.close-btn::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.close-btn::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.close-btn:hover {
+  border-color: #d4b3c8;
+}
+
+.close-btn:hover::before,
+.close-btn:hover::after {
+  background: #d4b3c8;
+}
+
+.header-link {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+}
+
+.header-link:hover {
+  text-decoration: none;
 }
 
 .logo-img {
