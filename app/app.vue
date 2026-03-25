@@ -15,7 +15,7 @@ function onMouseMove(e: MouseEvent) {
   mouseY = e.clientY
 
   const target = e.target as HTMLElement
-  glowVisible.value = !!(target.closest('a') || target.closest('.logo') || target.closest('.coming-soon'))
+  glowVisible.value = !!(target.closest('a') || target.closest('.header') || target.closest('.coming-soon'))
 }
 
 function animate() {
@@ -211,7 +211,7 @@ a:hover {
 }
 
 .logo-img {
-  width: 64px;
+  width: 120px;
   height: auto;
   margin-bottom: 0.75rem;
 }
