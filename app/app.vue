@@ -12,6 +12,9 @@ function close() {
   }
 }
 
+const dividerBar = ref<HTMLElement | null>(null)
+const isStuck = ref(false)
+
 const trailCount = 4
 const trailEls = ref<HTMLElement[]>([])
 const glowVisible = ref(false)
@@ -47,14 +50,25 @@ function animate() {
   rafId = requestAnimationFrame(animate)
 }
 
+let observer: IntersectionObserver | null = null
+
 onMounted(() => {
   document.addEventListener('mousemove', onMouseMove)
   rafId = requestAnimationFrame(animate)
+
+  if (dividerBar.value) {
+    observer = new IntersectionObserver(
+      ([e]) => { isStuck.value = e.intersectionRatio < 1 },
+      { threshold: [1], rootMargin: '-1px 0px 0px 0px' },
+    )
+    observer.observe(dividerBar.value)
+  }
 })
 
 onUnmounted(() => {
   document.removeEventListener('mousemove', onMouseMove)
   cancelAnimationFrame(rafId)
+  observer?.disconnect()
 })
 </script>
 
@@ -76,20 +90,23 @@ onUnmounted(() => {
     </svg>
     <div class="noise-overlay" />
 
-    <header class="header" :class="{ 'has-close': showClose }">
+    <header class="header">
       <NuxtLink to="/" class="header-link">
         <img src="~/assets/logo.png" alt="Seqman" class="logo-img">
         <h1 class="logo">Seqman</h1>
       </NuxtLink>
       <p class="subtitle">Stepdeq</p>
+    </header>
+
+    <div ref="dividerBar" class="divider-bar" :class="{ 'has-close': showClose, stuck: isStuck }">
+      <div class="divider-line" />
       <button
         v-if="showClose"
         class="close-btn"
         aria-label="Close"
         @click="close"
       />
-
-    </header>
+    </div>
 
     <main class="content">
       <NuxtPage />
@@ -207,7 +224,7 @@ a:hover {
 .noise-overlay {
   position: fixed;
   inset: 0;
-  z-index: 2;
+  z-index: 99;
   pointer-events: none;
   filter: url(#noise);
   opacity: 0.06;
@@ -227,30 +244,29 @@ a:hover {
 }
 
 .header {
-  position: relative;
   text-align: center;
   padding-bottom: 1.5rem;
 }
 
-.header::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+.divider-bar {
+  position: sticky;
+  top: -1px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.75rem 0 1.5rem;
+  background: linear-gradient(to bottom, #0a0a0a 60%, transparent);
+}
+
+.divider-line {
+  flex: 1;
   height: 1px;
   background: #1e1e1e;
 }
 
-.header.has-close::after {
-  right: 52px;
-}
-
 .close-btn {
-  position: absolute;
-  bottom: -20px;
-  right: 0;
-  z-index: 10;
+  flex-shrink: 0;
   background: none;
   border: 1px solid #2a2a2a;
   border-radius: 50%;
@@ -259,6 +275,7 @@ a:hover {
   cursor: pointer;
   transition: border-color 0.3s;
   padding: 0;
+  position: relative;
 }
 
 .close-btn::before,
@@ -289,6 +306,14 @@ a:hover {
 .close-btn:hover::before,
 .close-btn:hover::after {
   background: #d4b3c8;
+}
+
+.divider-bar:not(.has-close) {
+  padding: 0;
+}
+
+.divider-bar:not(.has-close) .divider-line {
+  margin: 0;
 }
 
 .header-link {
