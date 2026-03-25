@@ -332,6 +332,11 @@ a:hover {
   width: 120px;
   height: auto;
   margin-bottom: 0.75rem;
+  transition: filter 0.5s ease;
+}
+
+.header-link:hover .logo-img {
+  filter: brightness(1.2) sepia(0.3) hue-rotate(280deg) saturate(1.8);
 }
 
 .logo {
