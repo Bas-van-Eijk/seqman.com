@@ -1,0 +1,33 @@
+.legal h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.legal > p {
+  color: #888;
+  margin-bottom: 1.5rem;
+}
+
+.legal .updated {
+  font-size: 0.85rem;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+.legal section {
+  margin-bottom: 1.75rem;
+}
+
+.legal h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ccc;
+  margin-bottom: 0.5rem;
+}
+
+.legal section p {
+  font-size: 0.9rem;
+  color: #999;
+}
