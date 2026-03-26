@@ -22,15 +22,37 @@ function onKeydown(e: KeyboardEvent) {
   }
 }
 
-onMounted(() => window.addEventListener('keydown', onKeydown))
-onUnmounted(() => window.removeEventListener('keydown', onKeydown))
+const tapeReels = ref<SVGGElement | null>(null)
+let tapeRaf = 0
+let tapeAngle = 0
+let lastTime = 0
+const degreesPerMs = 360 / 1090
+
+function spinTape(now: number) {
+  if (lastTime) {
+    tapeAngle = (tapeAngle + degreesPerMs * (now - lastTime)) % 360
+    tapeReels.value?.setAttribute('transform', `rotate(${tapeAngle}, 72, 72)`)
+  }
+  lastTime = now
+  tapeRaf = requestAnimationFrame(spinTape)
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', onKeydown)
+  tapeRaf = requestAnimationFrame(spinTape)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', onKeydown)
+  cancelAnimationFrame(tapeRaf)
+})
 </script>
 
 <template>
   <div class="home">
     <div class="coming-soon">
       <svg class="tape-icon" width="72" height="72" viewBox="0 0 144 144" xmlns="http://www.w3.org/2000/svg">
-        <g class="tape-reels">
+        <g ref="tapeReels" class="tape-reels">
           <g transform="translate(42, 72)">
             <rect x="-12" y="-12" width="24" height="24" fill="none" stroke="#FFFFFF" stroke-width="2" rx="2"/>
             <rect x="-8" y="-2" width="16" height="4" fill="#FFFFFF"/>
@@ -83,12 +105,6 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 
 .tape-reels {
   transform-origin: 72px 72px;
-  animation: spin-tape 1.09s linear infinite;
-}
-
-@keyframes spin-tape {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
 }
 
 .coming-soon h2 {
