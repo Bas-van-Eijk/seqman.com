@@ -1,84 +1,111 @@
 <script setup lang="ts">
-const showDialog = ref(false)
-const isDesktop = ref(false)
-const isMac = computed(() =>
-  typeof navigator !== 'undefined' && navigator.userAgent.includes('Mac'),
-)
-const shortcut = computed(() => isMac.value ? '⌘+D' : 'Ctrl+D')
+const showDialog = ref(false);
+const isDesktop = ref(false);
+const isMac = computed(
+  () => typeof navigator !== "undefined" && navigator.userAgent.includes("Mac"),
+);
+const shortcut = computed(() => (isMac.value ? "⌘+D" : "Ctrl+D"));
 
 onMounted(() => {
-  isDesktop.value = !/Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-})
+  isDesktop.value =
+    !/Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent,
+    );
+});
 
 function bookmark() {
-  showDialog.value = true
+  showDialog.value = true;
 }
 
 function onKeydown(e: KeyboardEvent) {
-  if (!showDialog.value) return
-  const modKey = isMac.value ? e.metaKey : e.ctrlKey
-  if (modKey && e.key.toLowerCase() === 'd') {
-    showDialog.value = false
+  if (!showDialog.value) return;
+  const modKey = isMac.value ? e.metaKey : e.ctrlKey;
+  if (modKey && e.key.toLowerCase() === "d") {
+    showDialog.value = false;
   }
 }
 
-const tapeReels = ref<SVGGElement | null>(null)
-let tapeRaf = 0
-let tapeAngle = 0
-let lastTime = 0
-const degreesPerMs = 360 / 1090
-
-function spinTape(now: number) {
-  if (lastTime) {
-    tapeAngle = (tapeAngle + degreesPerMs * (now - lastTime)) % 360
-    tapeReels.value?.setAttribute('transform', `rotate(${tapeAngle}, 72, 72)`)
-  }
-  lastTime = now
-  tapeRaf = requestAnimationFrame(spinTape)
-}
-
-onMounted(() => {
-  window.addEventListener('keydown', onKeydown)
-  tapeRaf = requestAnimationFrame(spinTape)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('keydown', onKeydown)
-  cancelAnimationFrame(tapeRaf)
-})
+onMounted(() => window.addEventListener("keydown", onKeydown));
+onUnmounted(() => window.removeEventListener("keydown", onKeydown));
 </script>
 
 <template>
   <div class="home">
     <div class="coming-soon">
-      <svg class="tape-icon" width="72" height="72" viewBox="0 0 144 144" xmlns="http://www.w3.org/2000/svg">
-        <g ref="tapeReels" class="tape-reels">
+      <svg
+        class="tape-icon"
+        width="72"
+        height="72"
+        viewBox="0 0 144 144"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g class="tape-reels">
           <g transform="translate(42, 72)">
-            <rect x="-12" y="-12" width="24" height="24" fill="none" stroke="#FFFFFF" stroke-width="2" rx="2"/>
-            <rect x="-8" y="-2" width="16" height="4" fill="#FFFFFF"/>
-            <rect x="-2" y="-8" width="4" height="16" fill="#FFFFFF"/>
+            <rect
+              x="-12"
+              y="-12"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="#FFFFFF"
+              stroke-width="2"
+              rx="2"
+            />
+            <rect x="-8" y="-2" width="16" height="4" fill="#FFFFFF" />
+            <rect x="-2" y="-8" width="4" height="16" fill="#FFFFFF" />
           </g>
           <g transform="translate(102, 72)">
-            <rect x="-12" y="-12" width="24" height="24" fill="none" stroke="#FFFFFF" stroke-width="2" rx="2"/>
-            <rect x="-8" y="-2" width="16" height="4" fill="#FFFFFF"/>
-            <rect x="-2" y="-8" width="4" height="16" fill="#FFFFFF"/>
+            <rect
+              x="-12"
+              y="-12"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="#FFFFFF"
+              stroke-width="2"
+              rx="2"
+            />
+            <rect x="-8" y="-2" width="16" height="4" fill="#FFFFFF" />
+            <rect x="-2" y="-8" width="4" height="16" fill="#FFFFFF" />
           </g>
         </g>
-        <line x1="54" y1="60" x2="90" y2="60" stroke="#FFFFFF" stroke-width="2"/>
-        <line x1="54" y1="84" x2="90" y2="84" stroke="#FFFFFF" stroke-width="2"/>
+        <line
+          x1="54"
+          y1="60"
+          x2="90"
+          y2="60"
+          stroke="#FFFFFF"
+          stroke-width="2"
+        />
+        <line
+          x1="54"
+          y1="84"
+          x2="90"
+          y2="84"
+          stroke="#FFFFFF"
+          stroke-width="2"
+        />
       </svg>
       <h2>Coming Soon</h2>
       <p>We're working on something. Stay tuned.</p>
       <div class="actions">
-        <a v-if="isDesktop" href="#" class="action" @click.prevent="bookmark">Bookmark this site</a>
-        <a href="mailto:hello@seqman.com?subject=Keep%20me%20posted" class="action">Keep me posted</a>
+        <a v-if="isDesktop" href="#" class="action" @click.prevent="bookmark"
+          >Bookmark this site</a
+        >
+        <a
+          href="mailto:hello@seqman.com?subject=Keep%20me%20posted"
+          class="action"
+          >Keep me posted</a
+        >
       </div>
     </div>
 
     <Transition name="dialog">
       <div v-if="showDialog" class="dialog-overlay">
         <div class="dialog">
-          <p>Press <kbd>{{ shortcut }}</kbd> to bookmark this page.</p>
+          <p>
+            Press <kbd>{{ shortcut }}</kbd> to bookmark this page.
+          </p>
           <p class="dialog-hint">Go ahead — this dialog closes when you do.</p>
         </div>
       </div>
@@ -105,6 +132,16 @@ onUnmounted(() => {
 
 .tape-reels {
   transform-origin: 72px 72px;
+  animation: spin-tape 1.09s linear infinite;
+}
+
+@keyframes spin-tape {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .coming-soon h2 {
@@ -189,7 +226,9 @@ onUnmounted(() => {
 
 .dialog-enter-active .dialog,
 .dialog-leave-active .dialog {
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
 }
 
 .dialog-enter-from,
