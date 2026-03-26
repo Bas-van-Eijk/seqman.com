@@ -73,6 +73,14 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <div class="bg-gradients">
+    <div class="bg-blob bg-blob-1" />
+    <div class="bg-blob bg-blob-2" />
+    <div class="bg-blob bg-blob-3" />
+    <div class="bg-blob bg-blob-4" />
+    <div class="bg-blob bg-blob-5" />
+  </div>
+
   <div class="page">
     <div
       v-for="i in trailCount"
@@ -139,6 +147,65 @@ body {
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+}
+
+.bg-gradients {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bg-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+}
+
+.bg-blob-1 {
+  width: 600px;
+  height: 600px;
+  top: -15%;
+  left: -10%;
+  background: radial-gradient(circle, rgba(179, 145, 167, 0.06), transparent 70%);
+  opacity: 0.8;
+}
+
+.bg-blob-2 {
+  width: 500px;
+  height: 500px;
+  top: 30%;
+  right: -15%;
+  background: radial-gradient(circle, rgba(140, 100, 130, 0.05), transparent 70%);
+  opacity: 0.6;
+}
+
+.bg-blob-3 {
+  width: 800px;
+  height: 800px;
+  bottom: -10%;
+  left: 20%;
+  background: radial-gradient(circle, rgba(179, 145, 167, 0.04), transparent 70%);
+  opacity: 0.5;
+}
+
+.bg-blob-4 {
+  width: 400px;
+  height: 400px;
+  top: 60%;
+  left: -5%;
+  background: radial-gradient(circle, rgba(160, 120, 150, 0.05), transparent 70%);
+  opacity: 0.4;
+}
+
+.bg-blob-5 {
+  width: 350px;
+  height: 350px;
+  top: 10%;
+  right: 10%;
+  background: radial-gradient(circle, rgba(200, 170, 190, 0.03), transparent 70%);
+  opacity: 0.3;
 }
 
 a {
