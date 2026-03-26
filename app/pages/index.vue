@@ -1,9 +1,14 @@
 <script setup lang="ts">
 const showDialog = ref(false)
+const isDesktop = ref(false)
 const isMac = computed(() =>
   typeof navigator !== 'undefined' && navigator.userAgent.includes('Mac'),
 )
 const shortcut = computed(() => isMac.value ? '⌘+D' : 'Ctrl+D')
+
+onMounted(() => {
+  isDesktop.value = !/Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+})
 
 function bookmark() {
   showDialog.value = true
@@ -43,7 +48,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
       <h2>Coming Soon</h2>
       <p>We're working on something. Stay tuned.</p>
       <div class="actions">
-        <a href="#" class="action" @click.prevent="bookmark">Bookmark this site</a>
+        <a v-if="isDesktop" href="#" class="action" @click.prevent="bookmark">Bookmark this site</a>
         <a href="mailto:hello@seqman.com?subject=Keep%20me%20posted" class="action">Keep me posted</a>
       </div>
     </div>
