@@ -1,16 +1,24 @@
 <script setup lang="ts">
 const showDialog = ref(false)
-const shortcut = computed(() =>
-  typeof navigator !== 'undefined' && navigator.userAgent.includes('Mac') ? '⌘+D' : 'Ctrl+D',
+const isMac = computed(() =>
+  typeof navigator !== 'undefined' && navigator.userAgent.includes('Mac'),
 )
+const shortcut = computed(() => isMac.value ? '⌘+D' : 'Ctrl+D')
 
 function bookmark() {
   showDialog.value = true
 }
 
-function closeDialog() {
-  showDialog.value = false
+function onKeydown(e: KeyboardEvent) {
+  if (!showDialog.value) return
+  const modKey = isMac.value ? e.metaKey : e.ctrlKey
+  if (modKey && e.key.toLowerCase() === 'd') {
+    showDialog.value = false
+  }
 }
+
+onMounted(() => window.addEventListener('keydown', onKeydown))
+onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 </script>
 
 <template>
@@ -41,10 +49,10 @@ function closeDialog() {
     </div>
 
     <Transition name="dialog">
-      <div v-if="showDialog" class="dialog-overlay" @click.self="closeDialog">
+      <div v-if="showDialog" class="dialog-overlay">
         <div class="dialog">
           <p>Press <kbd>{{ shortcut }}</kbd> to bookmark this page.</p>
-          <button class="dialog-close" @click="closeDialog">Got it</button>
+          <p class="dialog-hint">Go ahead — this dialog closes when you do.</p>
         </div>
       </div>
     </Transition>
@@ -119,15 +127,26 @@ function closeDialog() {
   border: 1px solid #2a2a2a;
   border-radius: 12px;
   padding: 2rem 2.5rem;
-  text-align: center;
+  text-align: left;
   max-width: 320px;
 }
 
 .dialog p {
   font-size: 0.95rem;
   color: #ccc;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.75rem;
   line-height: 1.6;
+}
+
+.dialog p:last-child {
+  margin-bottom: 0;
+}
+
+.dialog-hint {
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 0.5rem;
+  text-align: left;
 }
 
 .dialog kbd {
@@ -140,22 +159,6 @@ function closeDialog() {
   font-size: 0.9em;
   color: #d4b3c8;
   margin: 0 0.2em;
-}
-
-.dialog-close {
-  background: none;
-  border: 1px solid #2a2a2a;
-  border-radius: 6px;
-  padding: 0.5rem 1.5rem;
-  color: #888;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: color 0.3s, border-color 0.3s;
-}
-
-.dialog-close:hover {
-  color: #d4b3c8;
-  border-color: #d4b3c8;
 }
 
 .dialog-enter-active,
