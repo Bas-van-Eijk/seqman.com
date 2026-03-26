@@ -1,3 +1,18 @@
+<script setup lang="ts">
+const showDialog = ref(false)
+const shortcut = computed(() =>
+  typeof navigator !== 'undefined' && navigator.userAgent.includes('Mac') ? '⌘+D' : 'Ctrl+D',
+)
+
+function bookmark() {
+  showDialog.value = true
+}
+
+function closeDialog() {
+  showDialog.value = false
+}
+</script>
+
 <template>
   <div class="home">
     <div class="coming-soon">
@@ -19,7 +34,20 @@
       </svg>
       <h2>Coming Soon</h2>
       <p>We're working on something. Stay tuned.</p>
+      <div class="actions">
+        <a href="#" class="action" @click.prevent="bookmark">Bookmark this site</a>
+        <a href="mailto:hello@seqman.com?subject=Keep%20me%20posted" class="action">Keep me posted</a>
+      </div>
     </div>
+
+    <Transition name="dialog">
+      <div v-if="showDialog" class="dialog-overlay" @click.self="closeDialog">
+        <div class="dialog">
+          <p>Press <kbd>{{ shortcut }}</kbd> to bookmark this page.</p>
+          <button class="dialog-close" @click="closeDialog">Got it</button>
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -66,5 +94,92 @@
 .coming-soon p {
   font-size: 1rem;
   color: #555;
+}
+
+.actions {
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.dialog {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 2rem 2.5rem;
+  text-align: center;
+  max-width: 320px;
+}
+
+.dialog p {
+  font-size: 0.95rem;
+  color: #ccc;
+  margin-bottom: 1.25rem;
+  line-height: 1.6;
+}
+
+.dialog kbd {
+  display: inline-block;
+  background: #222;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  padding: 0.35em 0.75em;
+  font-family: inherit;
+  font-size: 0.9em;
+  color: #d4b3c8;
+  margin: 0 0.2em;
+}
+
+.dialog-close {
+  background: none;
+  border: 1px solid #2a2a2a;
+  border-radius: 6px;
+  padding: 0.5rem 1.5rem;
+  color: #888;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: color 0.3s, border-color 0.3s;
+}
+
+.dialog-close:hover {
+  color: #d4b3c8;
+  border-color: #d4b3c8;
+}
+
+.dialog-enter-active,
+.dialog-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.dialog-enter-active .dialog,
+.dialog-leave-active .dialog {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.dialog-enter-from,
+.dialog-leave-to {
+  opacity: 0;
+}
+
+.dialog-enter-from .dialog {
+  transform: scale(0.95);
+  opacity: 0;
+}
+
+.dialog-leave-to .dialog {
+  transform: scale(0.95);
+  opacity: 0;
 }
 </style>
