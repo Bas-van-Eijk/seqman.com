@@ -322,8 +322,12 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 0.75rem 0 1.5rem;
-  background: linear-gradient(to bottom, #0a0a0a 60%, transparent);
+  padding: 0.75rem 0 3rem;
+  background: transparent;
+}
+
+.divider-bar.stuck {
+  background: linear-gradient(to bottom, rgba(10, 10, 10, 0.95) 0%, rgba(10, 10, 10, 0.6) 25%, rgba(10, 10, 10, 0.25) 50%, rgba(10, 10, 10, 0.05) 75%, transparent 100%);
 }
 
 .divider-line {
@@ -427,7 +431,7 @@ a:hover {
 
 .content {
   flex: 1;
-  padding: 2rem 0;
+  padding: 3.5rem 0 2rem;
 }
 
 .footer {
