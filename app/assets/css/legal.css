@@ -1,13 +1,40 @@
+.legal h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+
 .legal h2 {
   font-size: 1.35rem;
   font-weight: 700;
   color: #fff;
   margin-bottom: 0.5rem;
+  margin-top: 2rem;
 }
 
-.legal > p {
-  color: #888;
-  margin-bottom: 1.5rem;
+.legal h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ccc;
+  margin-bottom: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.legal h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #bbb;
+  margin-bottom: 0.4rem;
+  margin-top: 1.25rem;
+}
+
+.legal > p,
+.legal p {
+  font-size: 0.9rem;
+  color: #999;
+  margin-bottom: 1rem;
+  line-height: 1.7;
 }
 
 .legal .updated {
@@ -20,14 +47,93 @@
   margin-bottom: 1.75rem;
 }
 
-.legal h3 {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #ccc;
-  margin-bottom: 0.5rem;
-}
-
-.legal section p {
+.legal ul,
+.legal ol {
   font-size: 0.9rem;
   color: #999;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.legal li {
+  margin-bottom: 0.35rem;
+  line-height: 1.6;
+}
+
+.legal li strong {
+  color: #ccc;
+}
+
+.legal hr {
+  border: none;
+  border-top: 1px solid #1e1e1e;
+  margin: 2rem 0;
+}
+
+.legal table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.legal th {
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #2a2a2a;
+  color: #ccc;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.legal td {
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid #1a1a1a;
+  color: #888;
+}
+
+.legal tr:hover td {
+  color: #aaa;
+}
+
+.legal pre {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  margin-bottom: 1.25rem;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.legal code {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 0.85em;
+  color: #d4b3c8;
+}
+
+.legal pre code {
+  color: #bbb;
+  background: none;
+  padding: 0;
+}
+
+.legal :not(pre) > code {
+  background: #1a1a1a;
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+}
+
+.legal strong {
+  color: #ccc;
+  font-weight: 600;
+}
+
+.legal blockquote {
+  border-left: 3px solid #b391a7;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  color: #888;
+  font-style: italic;
 }

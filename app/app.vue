@@ -2,7 +2,7 @@
 const route = useRoute()
 const router = useRouter()
 
-const showClose = computed(() => route.path === '/eula' || route.path === '/privacy')
+const showClose = computed(() => ['eula', 'privacy', 'documentation', 'features', 'faq'].some(p => route.path === `/${p}`))
 
 function close() {
   if (window.history.length > 1) {
@@ -105,6 +105,14 @@ onUnmounted(() => {
       </NuxtLink>
       <p class="subtitle">Stepdeq</p>
     </header>
+
+    <nav v-if="!showClose" class="page-nav">
+      <NuxtLink to="/documentation">Documentation</NuxtLink>
+      <span class="sep">&middot;</span>
+      <NuxtLink to="/features">Features</NuxtLink>
+      <span class="sep">&middot;</span>
+      <NuxtLink to="/faq">FAQ</NuxtLink>
+    </nav>
 
     <div ref="dividerBar" class="divider-bar" :class="{ 'has-close': showClose, stuck: isStuck }">
       <div class="divider-line" />
@@ -427,6 +435,18 @@ a:hover {
   font-size: 0.875rem;
   color: #666;
   margin-top: 0.25rem;
+}
+
+.page-nav {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+  font-size: 0.85rem;
+}
+
+.page-nav .sep {
+  color: #333;
 }
 
 .content {
