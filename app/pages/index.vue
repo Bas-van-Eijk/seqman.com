@@ -159,7 +159,7 @@ const faqItems = [
     <section :ref="setRevealRef" class="video-section">
       <div class="video-wrap">
         <iframe
-          src="https://www.youtube.com/embed/7Goe0BEkExI"
+          src="https://www.youtube.com/embed/TOGjxp666qI"
           title="StepDeq demo"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
