@@ -230,9 +230,9 @@ const faqItems = [
 
     <!-- Marketplace CTA -->
     <section :ref="setRevealRef" class="marketplace-cta">
-      <p class="cta-label">Available on the</p>
+      <p class="cta-label">Available soon on the</p>
       <p class="cta-brand">Elgato Marketplace</p>
-      <p class="cta-hint">Search for "StepDeq" in the Stream Deck Marketplace to install.</p>
+      <p class="cta-hint">StepDeq is coming to the Stream Deck Marketplace. Stay tuned.</p>
     </section>
   </div>
 </template>
