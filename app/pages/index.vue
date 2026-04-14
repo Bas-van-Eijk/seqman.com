@@ -155,6 +155,19 @@ const faqItems = [
       </div>
     </section>
 
+    <!-- Video -->
+    <section :ref="setRevealRef" class="video-section">
+      <div class="video-wrap">
+        <iframe
+          src="https://www.youtube.com/embed/7Goe0BEkExI"
+          title="StepDeq demo"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        />
+      </div>
+    </section>
+
     <!-- Features -->
     <section id="features" :ref="setRevealRef" class="features">
       <h3 class="section-title">Features</h3>
@@ -233,6 +246,7 @@ const faqItems = [
 
 /* ---- Reveal animation ---- */
 .stats,
+.video-section,
 .features,
 .how-it-works,
 .faq-teaser,
@@ -335,6 +349,28 @@ const faqItems = [
   width: 1px;
   height: 32px;
   background: #1e1e1e;
+}
+
+/* ---- Video ---- */
+.video-section {
+  text-align: center;
+}
+
+.video-wrap {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #1e1e1e;
+  background: #111;
+}
+
+.video-wrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 /* ---- Section title ---- */
