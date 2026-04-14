@@ -31,7 +31,7 @@ function onMouseMove(e: MouseEvent) {
   mouseY = e.clientY
 
   const target = e.target as HTMLElement
-  glowVisible.value = !!(target.closest('a') || target.closest('.header') || target.closest('.coming-soon'))
+  glowVisible.value = !!(target.closest('a') || target.closest('.header') || target.closest('.coming-soon') || target.closest('.landing'))
 }
 
 function animate() {
@@ -106,8 +106,8 @@ onUnmounted(() => {
       <p class="subtitle">Stepdeq</p>
     </header>
 
-    <nav v-if="!showClose" class="page-nav">
-      <NuxtLink to="/documentation">Documentation</NuxtLink>
+    <nav class="page-nav">
+      <NuxtLink to="/documentation">Manual</NuxtLink>
       <span class="sep">&middot;</span>
       <NuxtLink to="/features">Features</NuxtLink>
       <span class="sep">&middot;</span>
