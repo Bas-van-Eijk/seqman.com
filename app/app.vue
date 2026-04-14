@@ -2,7 +2,15 @@
 const route = useRoute()
 const router = useRouter()
 
-const showClose = computed(() => ['eula', 'privacy', 'documentation', 'features', 'faq'].some(p => route.path === `/${p}`))
+const showClose = computed(() => ['eula', 'privacy', 'documentation', 'features', 'faq', 'kit-builder'].some(p => route.path === `/${p}`))
+const isFullWidth = computed(() => route.path === '/kit-builder')
+const isFullscreen = ref(false)
+
+watch(() => route.path, () => { isFullscreen.value = false })
+
+function toggleFullscreen() {
+  isFullscreen.value = !isFullscreen.value
+}
 
 function close() {
   if (window.history.length > 1) {
@@ -81,7 +89,7 @@ onUnmounted(() => {
     <div class="bg-blob bg-blob-5" />
   </div>
 
-  <div class="page">
+  <div class="page" :class="{ 'page--full-width': isFullWidth, 'page--fullscreen': isFullscreen }">
     <div
       v-for="i in trailCount"
       :key="i"
@@ -98,7 +106,7 @@ onUnmounted(() => {
     </svg>
     <div class="noise-overlay" />
 
-    <header class="header">
+    <header v-show="!isFullscreen" class="header">
       <NuxtLink to="/" class="header-link">
         <img src="~/assets/logo.png" alt="Seqman" class="logo-img">
         <h1 class="logo">Seqman</h1>
@@ -106,16 +114,25 @@ onUnmounted(() => {
       <p class="subtitle">Stepdeq</p>
     </header>
 
-    <nav class="page-nav">
+    <nav v-show="!isFullscreen" class="page-nav">
       <NuxtLink to="/documentation">Manual</NuxtLink>
       <span class="sep">&middot;</span>
       <NuxtLink to="/features">Features</NuxtLink>
       <span class="sep">&middot;</span>
       <NuxtLink to="/faq">FAQ</NuxtLink>
+      <span class="sep">&middot;</span>
+      <NuxtLink to="/kit-builder">Kit Builder</NuxtLink>
     </nav>
 
-    <div ref="dividerBar" class="divider-bar" :class="{ 'has-close': showClose, stuck: isStuck }">
+    <div ref="dividerBar" class="divider-bar" :class="{ 'has-close': showClose || isFullscreen, stuck: isStuck }">
       <div class="divider-line" />
+      <button
+        v-if="isFullWidth"
+        class="fullscreen-btn"
+        :class="{ active: isFullscreen }"
+        :aria-label="isFullscreen ? 'Exit fullscreen' : 'Fullscreen'"
+        @click="toggleFullscreen"
+      />
       <button
         v-if="showClose"
         class="close-btn"
@@ -128,7 +145,7 @@ onUnmounted(() => {
       <NuxtPage />
     </main>
 
-    <footer class="footer">
+    <footer v-show="!isFullscreen" class="footer">
       <p>&copy; {{ new Date().getFullYear() }} Seqman &middot; <a href="mailto:hello@seqman.com">hello@seqman.com</a> &middot; <a href="https://www.seqman.com">www.seqman.com</a></p>
       <nav class="footer-links">
         <NuxtLink to="/eula">EULA</NuxtLink>
@@ -318,6 +335,23 @@ a:hover {
   flex-direction: column;
 }
 
+.page--full-width {
+  max-width: none;
+}
+
+.page--fullscreen {
+  max-width: none;
+  padding: 0;
+}
+
+.page--fullscreen .content {
+  padding-top: 0;
+}
+
+.page--fullscreen .divider-bar {
+  padding: 0.5rem 1rem 0.5rem;
+}
+
 .header {
   text-align: center;
   padding-bottom: 1.5rem;
@@ -385,6 +419,60 @@ a:hover {
 .close-btn:hover::before,
 .close-btn:hover::after {
   background: #d4b3c8;
+}
+
+.fullscreen-btn {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid #2a2a2a;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: border-color 0.3s;
+  padding: 0;
+  position: relative;
+}
+
+.fullscreen-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid #555;
+  border-radius: 2px;
+  transform: translate(-50%, -50%);
+  transition: border-color 0.3s;
+}
+
+.fullscreen-btn.active::before {
+  width: 10px;
+  height: 10px;
+  border-width: 1.5px;
+}
+
+.fullscreen-btn.active::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid #555;
+  border-radius: 2px;
+  transform: translate(calc(-50% + 3px), calc(-50% - 3px));
+  transition: border-color 0.3s;
+}
+
+.fullscreen-btn:hover {
+  border-color: #d4b3c8;
+}
+
+.fullscreen-btn:hover::before,
+.fullscreen-btn:hover::after {
+  border-color: #d4b3c8;
 }
 
 .divider-bar:not(.has-close) {
